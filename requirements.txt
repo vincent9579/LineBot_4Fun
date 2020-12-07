@@ -1,0 +1,10 @@
+line-bot-sdk
+flask
+requests
+bs4
+zdict
+gne
+gtts
+pyimgur
+tracemoepy
+pyrebase
