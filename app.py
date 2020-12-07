@@ -19,17 +19,17 @@ import pyrebase
 import tracemoepy
 import pyimgur
 
-CLIENT_ID = "請填入Imgur Client ID"
+CLIENT_ID = "Imgur API Key"
 
 config={
-    "apiKey": "Firebase",
-    "authDomain": "Firebase",
-    "databaseURL": "Firebase",
-    "projectId": "Firebase",
-    "storageBucket": "Firebase",
-    "messagingSenderId": "Firebase",
-    "appId": "Firebase",
-    "measurementId": "Firebase"
+    "apiKey": "FireBase ApiKey",
+    "authDomain": "FireBase authDomain",
+    "databaseURL": "FireBase databaseURL",
+    "projectId": "FireBase projectId",
+    "storageBucket": "FireBase storageBucket",
+    "messagingSenderId": "FireBase messagingSenderId",
+    "appId": "FireBase appId",
+    "measurementId": "FireBase measurementId"
 }
 
 setting = {
@@ -47,18 +47,19 @@ static_tmp_path = os.path.join(os.path.dirname(__file__), 'static', 'tmp')
 app = Flask(__name__)
 
 # Channel Access Token
-line_bot_api = LineBotApi('填入LineBot Token')
+line_bot_api = LineBotApi('Line Bot API Token')
 # Channel Secret
-handler = WebhookHandler('填入LinBot Secret')
+handler = WebhookHandler('Line Bot Secret')
 
+weather_auth = "填入您的中央氣象局API Key"
     
 def helpmessage():
     helpMessage = """«指令表»
 ⇒【help】幫助
 ⇒【天氣 [縣市名]】查詢天氣
 ⇒【/字典 [字詞]】字典小助手
-⇒【/語音 [語言] [字詞]】Google語音
-⇒【/繁化 [模式] [字詞]】繁化姬助理
+⇒【/語音_[語言]_[字詞]】Google語音
+⇒【/繁化_[模式]_[字詞]】繁化姬助理
 ⇒【/搜圖 [on/off]】搜圖開關
 ⇒【/moe】[on/off]動漫截圖搜尋開關
 ⇒【/covid】[ISO code] Covid-19
@@ -77,8 +78,8 @@ moe狀態:{}
 num = 0
 CityList=["宜蘭縣","花蓮縣","臺東縣","澎湖縣","金門縣","連江縣","臺北市","新北市","桃園市","臺中市","臺南市","高雄市","基隆市","新竹縣","新竹市","苗栗縣","彰化縣","南投縣","雲林縣","嘉義縣","嘉義市","屏東縣"]
 
-def getWeather(city):
-	path = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-089?Authorization=CWB-8F001719-D827-4247-B4C2-7251BB99B8A0&locationName={}'.format(city)
+def getWeather(weather_auth,city):
+	path = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-089?Authorization={}&locationName={}'.format(weather_auth,city)
 	resp = requests.get(path)
 	list = json.loads(resp.text)
 	temp = list['records']['locations'][0]['location']
@@ -102,6 +103,7 @@ def zhconvert(converter,text):
     path = "https://api.zhconvert.org/convert?converter={}&text={}&prettify=1".format(converter,text)
     resp = requests.get(path)
     json_list = json.loads(resp.text)
+    print(json_list)
     text = json_list["data"]["text"]
     return text
 
@@ -327,14 +329,14 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, message)
             if text.replace("天氣 ","") in CityList:
                 text_city = text.replace("天氣 ","")
-                WeatherList1 = getWeather(text_city)
+                WeatherList1 = getWeather(weather_auth,text_city)
                 for i in range (0,len(WeatherList1)):
                     data = WeatherList1[i]
                     message = TextSendMessage(text=data)
                     line_bot_api.reply_message(event.reply_token, message)
             if text.replace("天氣 ","") == "台北市":
                 WeatherList1 = getWeather("臺北市")
-                for i in range (0,len(WeatherList1)):
+                for i in range (0,len(weather_auth,WeatherList1)):
                     data = WeatherList1[i]
                     message = TextSendMessage(text=data)
                     line_bot_api.reply_message(event.reply_token, message)
@@ -433,12 +435,12 @@ def handle_message(event):
             if text.replace("/繁化","") == "":
                 message = TextSendMessage(text="請輸入要繁化的字詞\n格式:/繁化 {轉換器} {被轉換的文字}\n轉換器有 \nSimplified （簡體化）、 Traditional （繁體化）、 China （中國化）、 Hongkong （香港化）、 Taiwan （台灣化）、 Pinyin （拼音化） Bopomofo （注音化）、 Mars （火星化）、 WikiSimplified （維基簡體化）、 WikiTraditional （維基繁體化）。")
                 line_bot_api.reply_message(event.reply_token, message)   
-            if len(text.split(" ")) == 2:
+            if len(text.split("_")) == 2:
                 message = TextSendMessage(text="錯誤\n請按照正確格式輸入\n格式:/繁化 {轉換器} {被轉換的文字}\n轉換器有 \nSimplified （簡體化）、 Traditional （繁體化）、 China （中國化）、 Hongkong （香港化）、 Taiwan （台灣化）、 Pinyin （拼音化） Bopomofo （注音化）、 Mars （火星化）、 WikiSimplified （維基簡體化）、 WikiTraditional （維基繁體化）。")
                 line_bot_api.reply_message(event.reply_token, message)      
-            if len(text.split(" ")) == 3:
-                converter = text.split(" ")[1]
-                txt = text.split(" ")[2]
+            if len(text.split("_")) == 3:
+                converter = text.split("_")[1]
+                txt = text.split("_")[2]
                 zh = zhconvert(converter,txt)
                 message = TextSendMessage(text=zh)
                 line_bot_api.reply_message(event.reply_token, message)  
@@ -453,7 +455,7 @@ def handle_message(event):
                 tts.save("hasil.mp3")
                 path_local = "hasil.mp3"
                 upload(path_local,path_local)
-                audio_message=AudioSendMessage(original_content_url="https://firebasestorage.googleapis.com/v0/b/fbclass-7e786.appspot.com/o/hasil.mp3?alt=media&token=none",duration=330*len(txt))
+                audio_message=AudioSendMessage(original_content_url="https://firebasestorage.googleapis.com/v0/b/{}/o/hasil.mp3?alt=media&token=none".format(config["storageBucket"]),duration=330*len(txt))
                 line_bot_api.reply_message(event.reply_token, audio_message)   
             if len(text.split("_")) == 3:
                 lang = text.split("_")[1]
@@ -463,7 +465,7 @@ def handle_message(event):
             
                 path_local = "hasil.mp3"
                 upload(path_local,path_local)
-                audio_message=AudioSendMessage(original_content_url="https://firebasestorage.googleapis.com/v0/b/fbclass-7e786.appspot.com/o/hasil.mp3?alt=media&token=none",duration=330*len(txt))
+                audio_message=AudioSendMessage(original_content_url="https://firebasestorage.googleapis.com/v0/b/{}/o/hasil.mp3?alt=media&token=none".format(config["storageBucket"]),duration=330*len(txt))
                 line_bot_api.reply_message(event.reply_token, audio_message)   
         if text.lower().startswith("/搜圖"):
             if text.lower().replace("/搜圖","") == "":
@@ -495,6 +497,14 @@ def handle_message(event):
                     msg = "moe搜圖已關閉"
                 message = TextSendMessage(text=msg)
                 line_bot_api.reply_message(event.reply_token, message) 
+        if text.lower() == "/lockurl":
+            setting["lockURL"] = True
+            message = TextSendMessage(text="現在只擷取特定網站的內文")
+            line_bot_api.reply_message(event.reply_token, message) 
+        if text.lower() == "/unlockurl":
+            setting["lockURL"] = False
+            message = TextSendMessage(text="現在可擷取任意網站之內文")
+            line_bot_api.reply_message(event.reply_token, message) 
     if isinstance(event.message, ImageMessage):
         if setting["sauce"] == True:
             message_content = line_bot_api.get_message_content(event.message.id)
@@ -504,7 +514,7 @@ def handle_message(event):
                 for chunk in message_content.iter_content():
                     fd.write(chunk)
             upload(file_name,file_name)
-            url = "https://firebasestorage.googleapis.com/v0/b/fbclass-7e786.appspot.com/o/temp.jpg?alt=media&token=none"
+            url = "https://firebasestorage.googleapis.com/v0/b/{}/o/temp.jpg?alt=media&token=none".format(config["storageBucket"])
             Ascii = ascii2d(url)
             msg = 'Ascii 搜尋結果\n'
             
