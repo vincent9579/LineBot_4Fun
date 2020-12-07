@@ -1,8 +1,14 @@
 # `LineBot4Fun` 一個好用的Line機器人
 
+加好友  ➤  [Link button](https://line.me/R/ti/p/%40175odroc)
+
 [LineBot_4Fun](https://github.com/vincent9579/LineBot_4Fun)，是一款基於`Python`的LineBot
 
 在現在這個忙碌的世界，很多事情都是交給AI或是機器人處理，但卻沒有一個機器人是完美的。難道沒辦法用一隻機器人，就能處理好所有的雜事嗎？這機器人就是基於這樣的理念創作出來的，在短時間內、在我能力所及之下拼拼湊湊出來的。
+
+
+
+
 
 ---
 
