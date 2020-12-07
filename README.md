@@ -8,17 +8,25 @@
 
 ## 安裝
 
-### 在開始前請先將所有Token及所需API Config更換掉
+### ➤ 在開始前請先將所有Token及所需API Config更換掉
 
 #### 安裝需要python 3.6以上
 
 下載專案後，解壓縮
+
 在跟專案的同層目錄中 開啟CMD
+
 輸入
+
 `$ pip3 install -r requirements.txt`
+
 安裝所有所需套件
+
 接下來在伺服器中執行檔案即可
+
 `$ python3 app.py`
+
+
 
 記得[Line開發者平台](https://developers.line.biz/console/)中的Webhook網址要改成你自己伺服器的網址
 
@@ -34,17 +42,30 @@
 #### 格式：`/字典 查詢字典 字詞`
 
 字典支持以下幾種 ：
+
 Yahoo Dictionary
+
 Moe Dictionary 萌典
+
 Urban Dictionary
+
 SpanishDict
+
 Jisho Japanese Dictionary
+
 Yandex Translate
+
 Oxford Dictionary
+
 Wiktionary
+
 iTaigi-愛台語
+
 國家教育研究院 - 雙語詞彙、學術名詞暨辭書資訊網
+
 原住民族語言線上詞典
+
+
 
 ![](https://github.com/vincent9579/LineBot_4Fun/blob/main/Example_img/Dict.jpg?raw=true)
 
@@ -56,16 +77,28 @@ iTaigi-愛台語
 #### 格式：`/繁化_模式_字詞`
 
 模式支援以下幾種
+
 Simplified （簡體化）
+
 Traditional （繁體化）
+
 China （中國化）
+
 Hongkong （香港化）
+
 Taiwan （台灣化）
+
 Pinyin （拼音化） 
+
 Bopomofo （注音化）
+
 Mars （火星化）
+
 WikiSimplified （維基簡體化）
+
 WikiTraditional （維基繁體化）
+
+
 
 
 ![](https://github.com/vincent9579/LineBot_4Fun/blob/main/Example_img/zhconvert1.jpg?raw=true)
