@@ -1,6 +1,6 @@
-# `LineBot4Fun` 一個好用的Line機器人
+# `LineBot4Fun` 
 
-加好友  ➤  [Link button](https://line.me/R/ti/p/%40175odroc)
+學校作業:D
 
 [LineBot_4Fun](https://github.com/vincent9579/LineBot_4Fun)，是一款基於`Python`的LineBot
 
